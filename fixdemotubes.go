@@ -12,7 +12,7 @@ import (
 
 const MAXDATA = 1000
 
-// Tipe bentukan dalam program
+// Tipe data pada program
 type Milestone struct {
 	ID             int
 	NamaTugas      string
@@ -25,14 +25,14 @@ type Milestone struct {
 	Selesai        bool
 }
 
-// Tipe bentukan untuk array statis pada tugas
+// Tipe data pada array untuk bagian tugas
 type ArrayTugas struct {
 	Data    [MAXDATA]Milestone
 	Jumlah  int
 	Counter int
 }
 
-var tugasDB ArrayTugas //  VARIABEL GLOBAL
+var tugasDB ArrayTugas //  VARIABEL GLOBAL, untuk menyimpan array utama
 
 const ( //  Warna Tampilan
 	warnaNormal = "\033[0m"
@@ -45,17 +45,15 @@ const ( //  Warna Tampilan
 	warnaBiru   = "\033[34m"
 )
 
-//  SUBPROGRAM: I/O Program
-//  Parameter: pertanyaan dengan tipe data string, reader dengan menggunakan *bufio.Reader
-//  Spesifikasi: Membaca input teks dari pengguna
-
+// SUBPROGRAM: I/O Program
+// Membaca input teks dari pengguna
 func inputStr(pertanyaan string, reader *bufio.Reader) string {
 	fmt.Print(pertanyaan)
 	teks, _ := reader.ReadString('\n')
 	return strings.TrimSpace(teks)
 }
 
-// Spesifikasi: Membaca input angka, akan meminta ulangi input jika bukan angka valid
+// Membaca input angka, ##akan meminta ulangi input jika bukan angka yang valid##
 func inputAngka(pertanyaan string, reader *bufio.Reader) int {
 	valid := false
 	hasil := 0
@@ -72,7 +70,7 @@ func inputAngka(pertanyaan string, reader *bufio.Reader) int {
 	return hasil
 }
 
-// Spesifikasi: Membaca angka dalam rentang [min, max], ulangi jika di luar rentang
+// Membaca angka dalam rentang [min, max], ##akan diulangi jika angka di luar rentang##
 func inputAngkaRentang(pertanyaan string, min, max int, reader *bufio.Reader) int {
 	valid := false
 	hasil := 0
@@ -88,9 +86,8 @@ func inputAngkaRentang(pertanyaan string, min, max int, reader *bufio.Reader) in
 	return hasil
 }
 
-//  SUBPROGRAM: Tampilan
-//  Spesifikasi: Mencetak berbagai elemen UI ke terminal
-
+// SUBPROGRAM: Tampilan
+// Mencetak berbagai elemen UI ke terminal
 func judulBesar(teks string) {
 	garis := strings.Repeat("─", 60)
 	fmt.Printf("\n%s%s%s\n", warnaCyan, garis, warnaNormal)
@@ -107,7 +104,7 @@ func pesanPeringatan(pesan string) { fmt.Printf("%s  %s%s\n", warnaKuning, pesan
 func pesanInfo(pesan string)       { fmt.Printf("%s    %s%s\n", warnaBiru, pesan, warnaNormal) }
 func tidakKetemu()                 { pesanPeringatan("Hmm, datanya tidak ketemu nih.") }
 
-// Spesifikasi: Mengembalikan label prioritas berwarna
+// Mengembalikan label prioritas berwarna
 func labelPrioritas(p int) string {
 	label := "?"
 	if p == 1 {
@@ -120,14 +117,14 @@ func labelPrioritas(p int) string {
 	return label
 }
 
-// Spesifikasi: Mengembalikan bar visual skor 1-10
+// Mengembalikan bar visual skor 1-10
 func barMood(skor int) string {
 	isi := skor
 	kosong := 10 - skor
 	return warnaHijau + strings.Repeat("█", isi) + warnaAbu + strings.Repeat("░", kosong) + warnaNormal
 }
 
-// Spesifikasi: Mengembalikan label stres berwarna berdasarkan nilai
+// Mengembalikan label stres berwarna berdasarkan nilai
 func labelStres(s int) string {
 	label := ""
 	if s <= 3 {
@@ -140,23 +137,23 @@ func labelStres(s int) string {
 	return label
 }
 
-// Spesifikasi: Mencetak satu tugas secara lengkap ke terminal
+// Mencetak satu tugas secara lengkap ke terminal
 func tampilkanTugas(m Milestone) {
 	status := warnaAbu + "○ Belum selesai" + warnaNormal
 	if m.Selesai {
 		status = warnaHijau + "✔ Sudah selesai!" + warnaNormal
 	}
 	fmt.Printf("\n  %s[ID: %d]%s %s%s%s\n", warnaBold, m.ID, warnaNormal, warnaBold, m.NamaTugas, warnaNormal)
-	fmt.Printf("      Keterangan   : %s\n", m.Deskripsi)
-	fmt.Printf("      Prioritas    : %s\n", labelPrioritas(m.Prioritas))
-	fmt.Printf("      Tingkat Stres: %s\n", labelStres(m.SkorStres))
-	fmt.Printf("      Mood/Perasaan: %s (%d/10)\n", barMood(m.SkorMood), m.SkorMood)
-	fmt.Printf("      Curhatan     : %s\n", m.CatatanRasa)
+	fmt.Printf("      Keterangan     : %s\n", m.Deskripsi)
+	fmt.Printf("      Prioritas      : %s\n", labelPrioritas(m.Prioritas))
+	fmt.Printf("      Tingkat Stres  : %s\n", labelStres(m.SkorStres))
+	fmt.Printf("      Mood/Perasaan  : %s (%d/10)\n", barMood(m.SkorMood), m.SkorMood)
+	fmt.Printf("      Curhatan       : %s\n", m.CatatanRasa)
 	fmt.Printf("      Tanggal Selesai: %s\n", m.TanggalSelesai)
-	fmt.Printf("      Status       : %s\n", status)
+	fmt.Printf("      Status         : %s\n", status)
 }
 
-// Spesifikasi: Mencetak daftar tugas dari array statis sejumlah n elemen
+// Mencetak daftar tugas dari array, dengan sejumlah n elemen
 func tampilkanArrayTugas(arr [MAXDATA]Milestone, n int) {
 	i := 0
 	for i < n {
@@ -165,7 +162,7 @@ func tampilkanArrayTugas(arr [MAXDATA]Milestone, n int) {
 	}
 }
 
-// Spesifikasi: Mencari tugas berdasarkan nama secara linear/sequential
+// Mencari tugas berdasarkan nama ##secara linear/sequential##
 func cariSequential(db ArrayTugas, katakunci string) ([MAXDATA]Milestone, int) {
 	var hasil [MAXDATA]Milestone
 	jumlahHasil := 0
@@ -181,10 +178,9 @@ func cariSequential(db ArrayTugas, katakunci string) ([MAXDATA]Milestone, int) {
 	return hasil, jumlahHasil
 }
 
-// Spesifikasi: Mengurutkan salinan array berdasarkan tanggal agar bisa di-binary search
+// Mengurutkan salinan array berdasarkan tanggal ##agar bisa di-binary search##
 func urutTanggalUntukBinarySearch(arr [MAXDATA]Milestone, n int) [MAXDATA]Milestone {
 	salinan := arr
-	// Gunakan insertion sort untuk mengurutkan tanggal
 	i := 1
 	for i < n {
 		kunci := salinan[i]
@@ -199,7 +195,7 @@ func urutTanggalUntukBinarySearch(arr [MAXDATA]Milestone, n int) [MAXDATA]Milest
 	return salinan
 }
 
-// Spesifikasi: Mencari tugas berdasarkan tanggal dengan metode biner (data diurutkan dulu)
+// Mencari tugas berdasarkan tanggal ##dengan metode biner (data diurutkan dulu)##
 func cariBinary(db ArrayTugas, tanggal string) ([MAXDATA]Milestone, int) {
 	var hasil [MAXDATA]Milestone
 	jumlahHasil := 0
@@ -238,7 +234,7 @@ func cariBinary(db ArrayTugas, tanggal string) ([MAXDATA]Milestone, int) {
 	return hasil, jumlahHasil
 }
 
-// Spesifikasi: Mencari posisi tugas berdasarkan ID secara sequential
+// Mencari posisi tugas berdasarkan ID ##secara sequential##
 func cariIndexByID(db ArrayTugas, id int) int {
 	indeks := -1
 	ditemukan := false
@@ -253,8 +249,8 @@ func cariIndexByID(db ArrayTugas, id int) int {
 	return indeks
 }
 
-// Spesifikasi: Mengurutkan tugas berdasarkan prioritas dengan Selection Sort
-// ascending = true → prioritas rendah ke tinggi jika ascending = false → prioritas tinggi ke rendah
+// Mengurutkan tugas berdasarkan prioritas dengan ##Selection Sort##
+// ascending = true maka prioritas rendah ke tinggi, jika ascending = false maka prioritas tinggi ke rendah
 func selectionSortPrioritas(arr [MAXDATA]Milestone, n int, ascending bool) [MAXDATA]Milestone {
 	salinan := arr
 	i := 0
@@ -279,8 +275,8 @@ func selectionSortPrioritas(arr [MAXDATA]Milestone, n int, ascending bool) [MAXD
 	return salinan
 }
 
-// Spesifikasi: Mengurutkan tugas berdasarkan skor mood dengan Insertion Sort
-// ascending = true → mood rendah ke tinggi jika  ascending = false → mood tinggi ke rendah
+// Mengurutkan tugas berdasarkan skor mood dengan ##Insertion Sort##
+// ascending = true maka mood rendah ke tinggi, jika  ascending = false maka mood tinggi ke rendah
 func insertionSortMood(arr [MAXDATA]Milestone, n int, ascending bool) [MAXDATA]Milestone {
 	salinan := arr
 	i := 1
@@ -308,7 +304,8 @@ func insertionSortMood(arr [MAXDATA]Milestone, n int, ascending bool) [MAXDATA]M
 	return salinan
 }
 
-// Spesifikasi: Menambahkan satu tugas baru ke dalam array
+// Menambahkan satu tugas baru ke dalam array
+// CRUD - ##create##
 func tambahTugas(db *ArrayTugas, reader *bufio.Reader) {
 	judulBesar("TAMBAH TUGAS BARU")
 
@@ -329,7 +326,7 @@ func tambahTugas(db *ArrayTugas, reader *bufio.Reader) {
 	m.SkorStres = inputAngkaRentang("  Seberapa Stres Ngerjainnya? (1=Tenang - 10=Panik): ", 1, 10, reader)
 	m.SkorMood = inputAngkaRentang("  Mood Kamu Waktu Ngerjain? (1=Sedih - 10=Happy banget): ", 1, 10, reader)
 	m.CatatanRasa = inputStr("  Mau Curhat Soal Tugas Ini?   : ", reader)
-	m.TanggalSelesai = inputStr("  Kapan Selesainya? (contoh: 20-08-2007) : ", reader)
+	m.TanggalSelesai = inputStr("  Kapan Selesainya? (contoh: 09-06-2026) : ", reader)
 
 	jwb := strings.ToLower(inputStr("  Udah selesai belum? (y = sudah / n = belum): ", reader))
 	m.Selesai = jwb == "y"
@@ -340,7 +337,8 @@ func tambahTugas(db *ArrayTugas, reader *bufio.Reader) {
 	pesanOke(fmt.Sprintf("Yeay! Tugas '%s' Berhasil Disimpan (ID: %d).", m.NamaTugas, m.ID))
 }
 
-// Spesifikasi: Menampilkan semua tugas yang tersimpan di array
+// Menampilkan semua tugas yang tersimpan di array
+// CRUD - ##read##
 func lihatSemuaTugas(db ArrayTugas) {
 	judulBesar("SEMUA TUGAS KAMU")
 	if db.Jumlah == 0 {
@@ -352,7 +350,8 @@ func lihatSemuaTugas(db ArrayTugas) {
 	fmt.Println()
 }
 
-// Spesifikasi: Mengubah data tugas yang dicari berdasarkan ID (Sequential Search)
+// Mengubah data tugas yang dicari berdasarkan ID (Sequential Search)
+// CRUD - ##update##
 func ubahTugas(db *ArrayTugas, reader *bufio.Reader) {
 	judulBesar("UBAH DATA TUGAS")
 	if db.Jumlah == 0 {
@@ -427,7 +426,8 @@ func ubahTugas(db *ArrayTugas, reader *bufio.Reader) {
 	pesanOke("Data Tugasnya Berhasil Diperbarui!")
 }
 
-// Spesifikasi: Menghapus tugas dari array berdasarkan ID (Sequential Search) ##elemen digeser ke kiri untuk mengisi kekosongan
+// Menghapus tugas dari array berdasarkan ID (Sequential Search) ##elemen digeser ke kiri untuk mengisi kekosongan
+// CRUD - ##delete##
 func hapusTugas(db *ArrayTugas, reader *bufio.Reader) {
 	judulBesar("HAPUS TUGAS")
 	if db.Jumlah == 0 {
@@ -463,7 +463,7 @@ func hapusTugas(db *ArrayTugas, reader *bufio.Reader) {
 	}
 }
 
-// Spesifikasi: Menu pencarian dengan pilihan Sequential (nama) atau Binary (tanggal)
+// Menu pencarian dengan pilihan Sequential (nama) atau Binary (tanggal)
 func menuCari(db ArrayTugas, reader *bufio.Reader) {
 	judulBesar("CARI TUGAS")
 	fmt.Println("  Mau Cari Pakai Para Apa?")
@@ -483,7 +483,7 @@ func menuCari(db ArrayTugas, reader *bufio.Reader) {
 			tampilkanArrayTugas(hasil, jumlah)
 		}
 	} else {
-		tanggal := inputStr("  Ketik Tanggalnya (contoh: 20-08-2007): ", reader)
+		tanggal := inputStr("  Ketik Tanggalnya (contoh: 09-06-2026): ", reader)
 		hasil, jumlah := cariBinary(db, tanggal)
 		judulKecil(fmt.Sprintf("Hasil Pencarian — %d Tugas Ketemu", jumlah))
 		if jumlah == 0 {
@@ -494,7 +494,7 @@ func menuCari(db ArrayTugas, reader *bufio.Reader) {
 	}
 }
 
-// Spesifikasi: Menu pengurutan dengan pilihan kriteria dan arah (asc/desc)
+// Menu pengurutan dengan pilihan kriteria dan arah (asc/desc)
 func menuUrut(db ArrayTugas, reader *bufio.Reader) {
 	judulBesar("URUTKAN TUGAS")
 
@@ -547,7 +547,7 @@ func menuUrut(db ArrayTugas, reader *bufio.Reader) {
 	}
 }
 
-// Spesifikasi: Menghitung dan menampilkan statistik tugas minggu ini ##meliputi rata-rata stres dan persentase penyelesaian
+// Menghitung dan menampilkan statistik tugas minggu ini ##meliputi rata-rata stres dan persentase penyelesaian
 func statistik(db ArrayTugas) {
 	judulBesar("LAPORAN MINGGUAN ")
 
@@ -564,7 +564,7 @@ func statistik(db ArrayTugas) {
 	senin := sekarang.AddDate(0, 0, -(hariIni - 1))
 	minggu := senin.AddDate(0, 0, 6)
 
-	format := "20-08-2007"
+	format := "02-01-2006"
 	tglSenin := senin.Format(format)
 	tglMinggu := minggu.Format(format)
 
@@ -645,18 +645,19 @@ func statistik(db ArrayTugas) {
 	}
 }
 
-// Spesifikasi: Mengisi array dengan data contoh awal saat program dijalankan
+// Mengisi array ##dengan data contoh awal saat program dijalankan##
 func isiDataContoh(db *ArrayTugas) {
 	hari := time.Now()
-	mingguIni := hari.Format("20-08-2007")
-	mingguLalu := hari.AddDate(0, 0, -7).Format("20-08-2007")
+	tgl := func(offset int) string {
+		return hari.AddDate(0, 0, offset).Format("02-01-2006")
+	}
 
 	contoh := [5]Milestone{
-		{ID: 1, NamaTugas: "Tugas Laporan Praktikum", Deskripsi: "Laporan Praktikum Algoritma Pemrograman 2", Prioritas: 3, SkorStres: 6, SkorMood: 7, CatatanRasa: "Menantang Deadline", TanggalSelesai: mingguIni, Selesai: true},
-		{ID: 2, NamaTugas: "Kuis Mingguan", Deskripsi: "Pengerjaan Soal-Soal", Prioritas: 2, SkorStres: 4, SkorMood: 8, CatatanRasa: "Menjemput Deadline", TanggalSelesai: mingguIni, Selesai: true},
-		{ID: 3, NamaTugas: "Interview Kepanitiaan", Deskripsi: "Interview TODAYS dan WPI", Prioritas: 3, SkorStres: 9, SkorMood: 5, CatatanRasa: "Deg-Degan Banget, Mencoba Keberuntungan", TanggalSelesai: mingguIni, Selesai: false},
-		{ID: 4, NamaTugas: "Belajar Ujian", Deskripsi: "Review Materi", Prioritas: 2, SkorStres: 5, SkorMood: 6, CatatanRasa: "3M, Mantap, Mumet, Mbuh", TanggalSelesai: mingguLalu, Selesai: true},
-		{ID: 5, NamaTugas: "Olahraga Rutin", Deskripsi: "Jogging", Prioritas: 1, SkorStres: 2, SkorMood: 9, CatatanRasa: "Jujur Malas:)", TanggalSelesai: mingguLalu, Selesai: true},
+		{ID: 1, NamaTugas: "Tugas Laporan Praktikum", Deskripsi: "Laporan Praktikum Algoritma Pemrograman 2", Prioritas: 3, SkorStres: 6, SkorMood: 7, CatatanRasa: "Menantang Deadline", TanggalSelesai: tgl(0), Selesai: true},
+		{ID: 2, NamaTugas: "Kuis Mingguan", Deskripsi: "Pengerjaan Soal-Soal", Prioritas: 2, SkorStres: 4, SkorMood: 8, CatatanRasa: "Menjemput Deadline", TanggalSelesai: tgl(-1), Selesai: true},
+		{ID: 3, NamaTugas: "Interview Kepanitiaan", Deskripsi: "Interview TODAYS dan WPI", Prioritas: 3, SkorStres: 9, SkorMood: 5, CatatanRasa: "Deg-Degan Banget, Mencoba Keberuntungan", TanggalSelesai: tgl(-2), Selesai: false},
+		{ID: 4, NamaTugas: "Belajar Ujian", Deskripsi: "Review Materi", Prioritas: 2, SkorStres: 5, SkorMood: 6, CatatanRasa: "3M, Mantap, Mumet, Mbuh", TanggalSelesai: tgl(-3), Selesai: true},
+		{ID: 5, NamaTugas: "Olahraga Rutin", Deskripsi: "Jogging", Prioritas: 1, SkorStres: 2, SkorMood: 9, CatatanRasa: "Jujur Malas:)", TanggalSelesai: tgl(-4), Selesai: true},
 	}
 
 	i := 0
@@ -668,7 +669,7 @@ func isiDataContoh(db *ArrayTugas) {
 	db.Counter = 6
 }
 
-// Spesifikasi: Mencetak logo MindStone saat program dijalankan
+// Mencetak logo MindStone
 func tampilanAwal() {
 	fmt.Println()
 	fmt.Printf("%s╔══════════════════════════════════════════════════════╗%s\n", warnaCyan, warnaNormal)
@@ -678,7 +679,7 @@ func tampilanAwal() {
 }
 
 // SUBPROGRAM: MENU UTAMA
-// Spesifikasi: Loop utama program, menampilkan menu dan mendelegasikan aksi ke subprogram terkait berdasarkan pilihan pengguna
+// Loop utama program, ##menampilkan menu dan mendelegasikan aksi ke subprogram terkait berdasarkan pilihan pengguna##
 func menuUtama(db *ArrayTugas, reader *bufio.Reader) {
 	tampilanAwal()
 	selesai := false
